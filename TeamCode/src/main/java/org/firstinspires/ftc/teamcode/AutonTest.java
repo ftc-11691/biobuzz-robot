@@ -20,29 +20,5 @@ public class AutonTest extends AutonBase {
         }
 
 
-        /*
-        for (int i = 1; i <= 4; i++) {
-            System.out.println("Number: " + i);
-            imuDrive(imuSpeed, 50, 0);
-            imuTurn(imuSpeed, -90);
-        }
-
-
-
-
-        /* ran out of time so stop after intakeing 3 artifatics
-        outtake.outtakeonAfterIntake();
-
-        //go to score
-        imuDrive(imuSpeed,-54,0);
-        imuTurn(imuSpeed,-90);
-        imuDrive(imuSpeed,-21,0);
-        imuTurn(imuSpeed,-45);
-
-        transferAndLaunchArtifacts();
-
-        //drive outside launch line for rp
-        imuTurn(imuSpeed,45);
-        imuDrive(imuSpeed,30,0);*/
     }
 }

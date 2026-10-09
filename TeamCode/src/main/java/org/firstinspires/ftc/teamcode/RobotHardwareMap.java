@@ -101,13 +101,12 @@ public class RobotHardwareMap {
         backRightMotor = baseHMap.get(DcMotorEx.class, "RR");
         frontLeftMotor = baseHMap.get(DcMotorEx.class, "FL");
         frontRightMotor = baseHMap.get(DcMotorEx.class, "FR");
-        intakeMotorFront = baseHMap.get(DcMotorEx.class,"IF");
-        outtakeMotorBack1 = baseHMap.get(DcMotorEx.class,"BRO");
-        outtakeMotorBack2 = baseHMap.get(DcMotorEx.class,"BLO");
-//        lifterMotor = baseHMap.get(DcMotorEx.class, "Lifter");
-        LeftTransferServo = baseHMap.get(CRServo.class,"LTS");
-        RightTransferServo = baseHMap.get(CRServo.class,"RTS");
-        CenterTransferServo = baseHMap.get(CRServo.class,"CTS");
+        //intakeMotorFront = baseHMap.get(DcMotorEx.class,"IF");
+        //outtakeMotorBack1 = baseHMap.get(DcMotorEx.class,"BRO");
+        //outtakeMotorBack2 = baseHMap.get(DcMotorEx.class,"BLO");
+        //LeftTransferServo = baseHMap.get(CRServo.class,"LTS");
+        //RightTransferServo = baseHMap.get(CRServo.class,"RTS");
+        //CenterTransferServo = baseHMap.get(CRServo.class,"CTS");
         //Initializes the IMU
         chImu = baseHMap.get(IMU.class, "chImu");
 
