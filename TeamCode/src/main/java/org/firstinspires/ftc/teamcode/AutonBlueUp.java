@@ -21,9 +21,11 @@ public class AutonBlueUp extends AutonBase {
         if (hiveTipped == 1) {
             //move over to flower to collect pollen
             imuTurn(imuSpeed, 90);
+            sleep(500);
             imuDrive(imuSpeed, 20, 0);
             //turn on intake to collect pollen from flower
             //turn off intake
+            sleep(1000);
             imuDrive(imuSpeed, -20, 0);
         }
         else {

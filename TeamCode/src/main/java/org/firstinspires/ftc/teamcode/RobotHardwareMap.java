@@ -1,48 +1,24 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.util.List;
-
-/***
- *
- * robot hardware map
- * Dragon$11691
- */
 public class RobotHardwareMap {
 
-    //0 - FL
-    //1 - FR
-    //2 - RL
-    //3 - RR
     private LinearOpMode opMode = null;
     public HardwareMap baseHMap;
 
     public VoltageSensor controlHubBatteryVoltage;
-    //public VoltageSensor expansionHubBatteryVoltage;
+    public VoltageSensor expansionHubBatteryVoltage;
 
     public LynxModule controlHub;
     public LynxModule expansionHub;
@@ -56,7 +32,7 @@ public class RobotHardwareMap {
     public DcMotorEx outtakeMotorBack2;
     public DcMotorEx clawRotator;
     public DcMotorEx armMotor;
- //   public DcMotorEx lifterMotor;
+
     public DigitalChannel LED1Green;
     public DigitalChannel LED1Red;
     public DigitalChannel LED2Green;
@@ -66,48 +42,50 @@ public class RobotHardwareMap {
     public CRServo RightTransferServo;
     public CRServo CenterTransferServo;
 
-
-
     public IMU chImu;
 
     private final int baseResolution_x = 320;
     private final int baseResolution_y = 240;
 
-    /**
-     * The variable to store our instance of the vision portal.
-     */
     private VisionPortal visionPortal;
 
     boolean controlHubBatteryVoltageEnabled = true;
     boolean expansionHubBatteryVoltageEnabled = true;
 
     public RobotHardwareMap(HardwareMap baseHMap, LinearOpMode opmode) {
-
         this.opMode = opmode;
         this.baseHMap = baseHMap;
     }
 
-    public void initialize(){
+    public void initialize() {
 
         opMode.telemetry.addData("Status", "detecting...");
 
         controlHubBatteryVoltage = baseHMap.get(VoltageSensor.class, "Control Hub");
-        //expansionHubBatteryVoltage = baseHMap.get(VoltageSensor.class, "Expansion Hub 2");
         controlHub = baseHMap.get(LynxModule.class, "Control Hub");
-        //expansionHub = baseHMap.get(LynxModule.class, "Expansion Hub 2");
+        expansionHubBatteryVoltage = baseHMap.tryGet(VoltageSensor.class, "Expansion Hub 2");
+        expansionHub = baseHMap.tryGet(LynxModule.class, "Expansion Hub 2");
 
-        //dc motor vs dc motor ex?
         backLeftMotor = baseHMap.get(DcMotorEx.class, "RL");
         backRightMotor = baseHMap.get(DcMotorEx.class, "RR");
         frontLeftMotor = baseHMap.get(DcMotorEx.class, "FL");
         frontRightMotor = baseHMap.get(DcMotorEx.class, "FR");
-        //intakeMotorFront = baseHMap.get(DcMotorEx.class,"IF");
-        //outtakeMotorBack1 = baseHMap.get(DcMotorEx.class,"BRO");
-        //outtakeMotorBack2 = baseHMap.get(DcMotorEx.class,"BLO");
-        //LeftTransferServo = baseHMap.get(CRServo.class,"LTS");
-        //RightTransferServo = baseHMap.get(CRServo.class,"RTS");
-        //CenterTransferServo = baseHMap.get(CRServo.class,"CTS");
-        //Initializes the IMU
+
+        //intakeMotorFront = baseHMap.tryGet(DcMotorEx.class, "IF");
+        outtakeMotorBack1 = baseHMap.tryGet(DcMotorEx.class, "BRO");
+        outtakeMotorBack2 = baseHMap.tryGet(DcMotorEx.class, "BLO");
+        clawRotator = baseHMap.tryGet(DcMotorEx.class, "clawRotator");
+        armMotor = baseHMap.tryGet(DcMotorEx.class, "armMotor");
+
+        LED1Green = baseHMap.tryGet(DigitalChannel.class, "LED1Green");
+        LED1Red = baseHMap.tryGet(DigitalChannel.class, "LED1Red");
+        LED2Green = baseHMap.tryGet(DigitalChannel.class, "LED2Green");
+        LED2Red = baseHMap.tryGet(DigitalChannel.class, "LED2Red");
+
+        LeftTransferServo = baseHMap.tryGet(CRServo.class, "LTS");
+        RightTransferServo = baseHMap.tryGet(CRServo.class, "RTS");
+        CenterTransferServo = baseHMap.tryGet(CRServo.class, "CTS");
+
         chImu = baseHMap.get(IMU.class, "chImu");
 
         IMU.Parameters myIMUParamaters = new IMU.Parameters(
@@ -120,7 +98,25 @@ public class RobotHardwareMap {
 
         opMode.telemetry.addData("Status", "done");
         opMode.telemetry.update();
-
     }
 
+    public boolean hasIntake() {
+        return intakeMotorFront != null;
+    }
+
+    public boolean hasOuttake() {
+        return outtakeMotorBack1 != null && outtakeMotorBack2 != null;
+    }
+
+    public boolean hasTransfer() {
+        return LeftTransferServo != null && RightTransferServo != null && CenterTransferServo != null;
+    }
+
+    public boolean hasArm() {
+        return armMotor != null && clawRotator != null;
+    }
+
+    public boolean hasLEDs() {
+        return LED1Green != null && LED1Red != null && LED2Green != null && LED2Red != null;
+    }
 }

@@ -31,7 +31,7 @@ public class Outtake {
 
     public void initialize() {
         PIDFCoefficients pidfCoeficnets = new PIDFCoefficients();
-        robotHardwareMap.outtakeMotorBack1.setDirection(DcMotorSimple.Direction.REVERSE);
+        //robotHardwareMap.outtakeMotorBack1.setDirection(DcMotorSimple.Direction.REVERSE);
         robotHardwareMap.outtakeMotorBack2.setDirection(DcMotorSimple.Direction.FORWARD);
         outtakerunning = false;
         restartouttake = false;
