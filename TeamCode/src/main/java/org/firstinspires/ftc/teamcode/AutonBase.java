@@ -236,16 +236,19 @@ public class AutonBase extends LinearOpMode {
             }
 
             // Stop all motion & Turn off RUN_TO_POSITION
+            // Stop all motion & Turn off RUN_TO_POSITION
             moveRobot(0, 0);
-            resetHeading();
             theHardwareMap.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             theHardwareMap.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             theHardwareMap.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             theHardwareMap.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
+            imuTurn(1, -degrees);   // correct back to the heading we were holding
         }
     }
+
+
+
 
     public void encoderStrafe(double speed, double strafeDistance, double timeoutS){
         int newFrontLeftTarget;
