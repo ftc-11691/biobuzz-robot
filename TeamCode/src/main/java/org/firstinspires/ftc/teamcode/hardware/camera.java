@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -9,6 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.RobotHardwareMap;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import java.util.HashSet;
+import java.util.Set;
 
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class camera {
 
     public void start(){
         limelight.start();
+        limelight.pipelineSwitch(2);
     }
 
     public void loop(){
@@ -41,20 +45,48 @@ public class camera {
         limelight.updateRobotOrientation(orentation.getYaw());
         llResult = limelight.getLatestResult();
 
-        if (goalColor == 0) {
-            opMode.telemetry.addLine("Goal Color Blue");
-        }
-        else {
-            opMode.telemetry.addLine("Goal Color Red");
-        }
-
         if ((llResult != null) && llResult.isValid()){
             Pose3D botpos = llResult.getBotpose_MT2();
             opMode.telemetry.addLine(String.format("XYA %6.1f %6.1f  %6.3f ", llResult.getTx(),  llResult.getTy(), llResult.getTa()));
             opMode.telemetry.addData("BotPos", botpos.toString());
             opMode.telemetry.addData("Yaw", botpos.getOrientation().getYaw());
             opMode.telemetry.addData("AprilTag Distance (area proxy)", String.format("%.2f%%", llResult.getTa()));
+            List<LLResultTypes.FiducialResult> tags = llResult.getFiducialResults();
+            for (LLResultTypes.FiducialResult tag : tags) {
+                opMode.telemetry.addLine("Tag ID: " + tag.getFiducialId());
+            }
         }
+    }
+
+    public int checkTags(int selection) {
+        int minId;
+        int maxId;
+        switch (selection) {
+            case 1: minId = 42; maxId = 45; break; // blue scoring
+            case 2: minId = 30; maxId = 33; break; // red scoring
+            case 3: minId = 38; maxId = 41; break; // blue audience
+            case 4: minId = 34; maxId = 37; break; // red audience
+            default: return 0;
+        }
+
+        Set<Integer> found = new HashSet<>();
+        for (int run = 0; run < 10 && !opMode.isStopRequested(); run++) {
+            LLResult result = limelight.getLatestResult();
+            if (result != null && result.isValid()) {
+                for (LLResultTypes.FiducialResult tag : result.getFiducialResults()) {
+                    int id = tag.getFiducialId();
+                    if (id >= minId && id <= maxId) {
+                        found.add(id);
+                    }
+                }
+            }
+            opMode.sleep(50); // gives the Limelight time to produce a new frame
+        }
+
+        // optional: delete this line if you don't want it on the screen
+        opMode.telemetry.addData("Tags found (group " + selection + ")", found.toString());
+
+        return found.size() >= 3 ? 1 : 0;
     }
 
     public double Robotallignwithgoal(double twistin) {

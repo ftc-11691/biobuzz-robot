@@ -1,21 +1,28 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.LynxModuleImuType;
+
+import org.firstinspires.ftc.teamcode.hardware.camera;
+
 
 @Autonomous(name = "Auton Blue Up", group = "Autons")
-public class AutonBlueUp extends AutonBase {
+public class AutonBlueScoringUp extends AutonBase {
     // Robot starts with back against center of blue depot
+    camera cam;
 
     double imuSpeed = 1;
-    int hiveTipped = 1;
+    int hiveTipped = 0;
 
     @Override
     public void runOpMode() {
         initialize();
+        cam = new camera(theHardwareMap, this);
         waitForStart();
+        cam.start();
 
         //shoot all four preloaded pollen, (5 seconds)
+        hiveTipped = cam.checkTags(1);
+
 
 
         if (hiveTipped == 1) {
