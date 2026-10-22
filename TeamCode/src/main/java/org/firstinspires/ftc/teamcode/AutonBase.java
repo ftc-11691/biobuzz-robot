@@ -107,13 +107,13 @@ public class AutonBase extends LinearOpMode {
         theHardwareMap.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         theHardwareMap.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        intake = new Intake(theHardwareMap, this);
-        intake.initialize();
+        //intake = new Intake(theHardwareMap, this);
+        //intake.initialize();
 
-        outtake = new Outtake(theHardwareMap, this);
-        outtake.initialize();
+        //outtake = new Outtake(theHardwareMap, this);
+        //outtake.initialize();
 
-        Camera = new camera(theHardwareMap, this);
+        //Camera = new camera(theHardwareMap, this);
 
 
         /*telemetry.addData("Starting at",  "%7d :%7d :%7d :%7d",
@@ -170,7 +170,7 @@ public class AutonBase extends LinearOpMode {
                         theHardwareMap.frontLeftMotor.getCurrentPosition(), theHardwareMap.backLeftMotor.getCurrentPosition(),
                         theHardwareMap.frontRightMotor.getCurrentPosition(), theHardwareMap.backRightMotor.getCurrentPosition());
                 telemetry.update();
-                outtake.ControlMotorSpeed();
+                //outtake.ControlMotorSpeed();
             }
 
             theHardwareMap.frontLeftMotor.setPower(0);
@@ -232,18 +232,23 @@ public class AutonBase extends LinearOpMode {
 
                 // Apply the turning correction to the current driving speed.
                 moveRobot(driveSpeed, turnSpeed);
-                outtake.ControlMotorSpeed();
+                //outtake.ControlMotorSpeed();
             }
 
             // Stop all motion & Turn off RUN_TO_POSITION
+            // Stop all motion & Turn off RUN_TO_POSITION
             moveRobot(0, 0);
-            resetHeading();
             theHardwareMap.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             theHardwareMap.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             theHardwareMap.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             theHardwareMap.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            imuTurn(1, -degrees);   // correct back to the heading we were holding
         }
     }
+
+
+
 
     public void encoderStrafe(double speed, double strafeDistance, double timeoutS){
         int newFrontLeftTarget;
@@ -290,7 +295,7 @@ public class AutonBase extends LinearOpMode {
                         theHardwareMap.frontLeftMotor.getCurrentPosition(), theHardwareMap.backLeftMotor.getCurrentPosition(),
                         theHardwareMap.frontRightMotor.getCurrentPosition(), theHardwareMap.backRightMotor.getCurrentPosition());
                 telemetry.update();
-                outtake.ControlMotorSpeed();
+                //outtake.ControlMotorSpeed();
             }
 
             // Stop all motion;
@@ -361,7 +366,7 @@ public class AutonBase extends LinearOpMode {
                 theHardwareMap.frontRightMotor.setPower(Math.abs(speed) - turnSpeed);
                 theHardwareMap.backLeftMotor.setPower(Math.abs(speed) + turnSpeed);
                 theHardwareMap.backRightMotor.setPower(Math.abs(speed) + turnSpeed);
-                outtake.ControlMotorSpeed();
+                //outtake.ControlMotorSpeed();
 
 
 
@@ -375,7 +380,7 @@ public class AutonBase extends LinearOpMode {
                         theHardwareMap.frontLeftMotor.getCurrentPosition(), theHardwareMap.backLeftMotor.getCurrentPosition(),
                         theHardwareMap.frontRightMotor.getCurrentPosition(), theHardwareMap.backRightMotor.getCurrentPosition());
                 telemetry.update();
-                outtake.ControlMotorSpeed();
+                //outtake.ControlMotorSpeed();
             }
 
 
@@ -414,7 +419,7 @@ public class AutonBase extends LinearOpMode {
 
             // Pivot in place by applying the turning correction
             moveRobot(0, turnSpeed);
-            outtake.ControlMotorSpeed();
+            //outtake.ControlMotorSpeed();
         }
 
         // Stop all motion;
@@ -425,7 +430,7 @@ public class AutonBase extends LinearOpMode {
     public void aprilTagOutakeSpeedAdjustAndAlignment(){
         double turnSpeed = 1;
         Camera.loop();
-        outtake.setSpeed(Camera.outtakespeedfordistance(outtake.getspeed()));
+        //outtake.setSpeed(Camera.outtakespeedfordistance(outtake.getspeed()));
 /*        while (opModeIsActive() && (turnSpeed > 0.3)) {
             Camera.loop();
             turnSpeed = Camera.Robotallignwithgoal(0);
@@ -441,7 +446,7 @@ public class AutonBase extends LinearOpMode {
 
     public void transferAndLaunchArtifacts() {
         aprilTagOutakeSpeedAdjustAndAlignment();
-        outtake.blockingShoot();
+        //outtake.blockingShoot();
         outtake.outtakeoff();
     }
 
