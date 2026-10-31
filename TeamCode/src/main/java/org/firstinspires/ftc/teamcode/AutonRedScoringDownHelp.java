@@ -11,7 +11,7 @@ public class AutonRedScoringDownHelp extends AutonBase {
     // Robot starts with back against center of blue depot
     camera cam;
 
-    double imuSpeed = 0.5;
+    double imuSpeed = 1;
 
     int hiveTipped = 0;
 
@@ -36,13 +36,35 @@ public class AutonRedScoringDownHelp extends AutonBase {
 
         //if we can see it, success
         if (hiveTipped == 1) {
-            //shoot preloaded pollen
+            //shoot 4 preloaded pollen
             sleep(5000);
-            imuDrive(imuSpeed, 7, 0);
-            imuStrafe(imuSpeed, 11, 0, 30);
-            imuDrive(imuSpeed, -6, 0);
-
-
+            imuTurn(imuSpeed, -90);
+            //turn on intake
+            sleep(1000);
+            //turn off intake
+            sleep(1000);
+            //"turn towards" according to strategy team
+            imuTurn(imuSpeed, 90);
+            //shoot 4 pollen
+            sleep(5000);
+            //go park
+            imuDrive(imuSpeed, -12, 0);
+            imuStrafe(imuSpeed, -45, 0, 30);
+        }
+        else {
+            imuDrive(imuSpeed, -100, 0);
+            sleep(500);
+            imuStrafe(imuSpeed, -35, 0, 30);
+            sleep(500);
+            imuDrive(imuSpeed, -15, 0);
+            imuTurn(imuSpeed, -135);
+            //shoot 4 preloaded pollen
+            sleep(5000);
+            imuTurn(imuSpeed, 135);
+            sleep(500);
+            encoderStrafe(imuSpeed, -20 , 30);
+            sleep(500);
+            imuDrive(imuSpeed, 70, 0);
         }
     }
 }
