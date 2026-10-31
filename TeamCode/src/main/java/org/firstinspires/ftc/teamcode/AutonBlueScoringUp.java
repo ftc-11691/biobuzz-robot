@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.hardware.camera;
 
 
-@Autonomous(name = "Auton Blue Up", group = "Autons")
+@Autonomous(name = "Auton Blue Scoring Up", group = "Autons")
 public class AutonBlueScoringUp extends AutonBase {
     // Robot starts with back against center of blue depot
     camera cam;
@@ -13,19 +13,21 @@ public class AutonBlueScoringUp extends AutonBase {
     double imuSpeed = 1;
     int hiveTipped = 0;
 
+    //where we are according to the checkTags method
+    int AprilPosition = 1;
+
     @Override
     public void runOpMode() {
         initialize();
         cam = new camera(theHardwareMap, this);
         waitForStart();
         cam.start();
-
         //shoot all four preloaded pollen, (5 seconds)
-        hiveTipped = cam.checkTags(1);
+        //output of 1 means visible, 0 means not
+        hiveTipped = cam.checkTags(AprilPosition);
 
-
-
-        if (hiveTipped == 1) {
+        //if did tip
+        if (hiveTipped == 0) {
             //move over to flower to collect pollen
             imuTurn(imuSpeed, 90);
             sleep(500);
@@ -35,6 +37,7 @@ public class AutonBlueScoringUp extends AutonBase {
             sleep(1000);
             imuDrive(imuSpeed, -20, 0);
         }
+        //if didnt tip
         else {
             //go to garden to collect pollen
             imuTurn(imuSpeed, -90);

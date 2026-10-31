@@ -61,6 +61,7 @@ public class camera {
     public int checkTags(int selection) {
         int minId;
         int maxId;
+        limelight.pipelineSwitch(2);
         switch (selection) {
             case 1: minId = 42; maxId = 45; break; // blue scoring
             case 2: minId = 30; maxId = 33; break; // red scoring
@@ -70,7 +71,7 @@ public class camera {
         }
 
         Set<Integer> found = new HashSet<>();
-        for (int run = 0; run < 10 && !opMode.isStopRequested(); run++) {
+        for (int run = 0; run < 40 && !opMode.isStopRequested(); run++) {
             LLResult result = limelight.getLatestResult();
             if (result != null && result.isValid()) {
                 for (LLResultTypes.FiducialResult tag : result.getFiducialResults()) {
@@ -86,7 +87,7 @@ public class camera {
         // optional: delete this line if you don't want it on the screen
         opMode.telemetry.addData("Tags found (group " + selection + ")", found.toString());
 
-        return found.size() >= 3 ? 1 : 0;
+        return found.size() >= 2 ? 1 : 0;
     }
 
     public double Robotallignwithgoal(double twistin) {
