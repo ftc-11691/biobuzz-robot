@@ -71,7 +71,7 @@ public class camera {
         }
 
         Set<Integer> found = new HashSet<>();
-        for (int run = 0; run < 40 && !opMode.isStopRequested(); run++) {
+        for (int run = 0; run < 20 && !opMode.isStopRequested(); run++) {
             LLResult result = limelight.getLatestResult();
             if (result != null && result.isValid()) {
                 for (LLResultTypes.FiducialResult tag : result.getFiducialResults()) {

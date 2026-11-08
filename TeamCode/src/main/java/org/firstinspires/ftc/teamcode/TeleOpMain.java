@@ -27,10 +27,10 @@ public class TeleOpMain extends LinearOpMode {
         robotDrive.initialize();
 
         Intake intake = new Intake(theHardwareMap, this);
-        intake.initialize();
+        //intake.initialize();
 
         Outtake outtake = new Outtake(theHardwareMap, this);
-        outtake.initialize();
+        //outtake.initialize();
 
         camera Camera = new camera(theHardwareMap, this);
 
@@ -136,32 +136,32 @@ public class TeleOpMain extends LinearOpMode {
              */
             // left triger press- stop intake and outtake
             if (currentGamepad2.left_trigger > 0.50 && previousGamepad2.left_trigger<=0.50) {
-                intake.off();
-                outtake.outtakeoff();
+                //intake.off();
+                //outtake.outtakeoff();
             }
 
             // a press = toggle intake
             if (currentGamepad2.a && !previousGamepad2.a) {
-                intake.Toggle();
+                //intake.Toggle();
             }
 
             // x press - toggle outtake
             if (currentGamepad2.x && !previousGamepad2.x) {
-                outtake.ToggleOuttakeMotor();
+                //outtake.ToggleOuttakeMotor();
             }
 
             // while b is down adjust outtake speed based on camera
             if (currentGamepad2.b) {
-                outtake.setSpeed(Camera.outtakespeedfordistance(outtake.getspeed()));
+                //outtake.setSpeed(Camera.outtakespeedfordistance(outtake.getspeed()));
             }
 
             if (currentGamepad2.y) {
-                outtake.RunSideTransferServo();
-                outtake.RunCenterTransferServer();
+                //outtake.RunSideTransferServo();
+                //outtake.RunCenterTransferServer();
 
             } else {
-                outtake.StopSideTransferServo();
-                outtake.StopCenterTransferServo();
+                //outtake.StopSideTransferServo();
+                //outtake.StopCenterTransferServo();
             }
 
             if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
@@ -212,7 +212,7 @@ public class TeleOpMain extends LinearOpMode {
                 theHardwareMap.servoClaw2.setPosition(currentClaw);
             }*/
 
-                outtake.ControlMotorSpeed();
+                //outtake.ControlMotorSpeed();
 
                 telemetry.update();
 
