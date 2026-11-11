@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -14,7 +15,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 public class RobotHardwareMap {
 
-    private LinearOpMode opMode = null;
+    private OpMode opMode = null;
     public HardwareMap baseHMap;
 
     public VoltageSensor controlHubBatteryVoltage;
@@ -22,7 +23,7 @@ public class RobotHardwareMap {
 
     public LynxModule controlHub;
     public LynxModule expansionHub;
-
+    public DcMotorEx testMotor3;
     public DcMotorEx backLeftMotor;
     public DcMotorEx backRightMotor;
     public DcMotorEx frontLeftMotor;
@@ -52,7 +53,7 @@ public class RobotHardwareMap {
     boolean controlHubBatteryVoltageEnabled = true;
     boolean expansionHubBatteryVoltageEnabled = true;
 
-    public RobotHardwareMap(HardwareMap baseHMap, LinearOpMode opmode) {
+    public RobotHardwareMap(HardwareMap baseHMap, OpMode opmode) {
         this.opMode = opmode;
         this.baseHMap = baseHMap;
     }
@@ -65,7 +66,7 @@ public class RobotHardwareMap {
         controlHub = baseHMap.get(LynxModule.class, "Control Hub");
         expansionHubBatteryVoltage = baseHMap.tryGet(VoltageSensor.class, "Expansion Hub 2");
         expansionHub = baseHMap.tryGet(LynxModule.class, "Expansion Hub 2");
-
+//        testMotor3 = baseHMap.get(DcMotorEx.class, "testMotor3");
         backLeftMotor = baseHMap.get(DcMotorEx.class, "RL");
         backRightMotor = baseHMap.get(DcMotorEx.class, "RR");
         frontLeftMotor = baseHMap.get(DcMotorEx.class, "FL");
