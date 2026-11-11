@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.RobotHardwareMap;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.util.List;
 
@@ -56,6 +58,68 @@ public class camera {
                 opMode.telemetry.addLine("Tag ID: " + tag.getFiducialId());
             }
         }
+    }
+
+    public double Aim(int selection) {
+        final double PROMINENCE_CUTOFF = 0.5; // keep tags with at least 50% of the biggest tag's area
+
+        int minId;
+        int maxId;
+        limelight.pipelineSwitch(2);
+        switch (selection) {
+            case 1: minId = 38; maxId = 45; break; // blue (scoring + audience)
+            case 2: minId = 30; maxId = 37; break; // red (scoring + audience)
+            default: return Double.NaN;
+        }
+
+        Map<Integer, Double> txSum = new HashMap<>();
+        Map<Integer, Double> areaSum = new HashMap<>();
+        Map<Integer, Integer> count = new HashMap<>();
+
+        for (int run = 0; run < 20 && !opMode.isStopRequested(); run++) {
+            LLResult result = limelight.getLatestResult();
+            if (result != null && result.isValid()) {
+                for (LLResultTypes.FiducialResult tag : result.getFiducialResults()) {
+                    int id = tag.getFiducialId();
+                    if (id >= minId && id <= maxId) {
+                        txSum.put(id, txSum.getOrDefault(id, 0.0) + tag.getTargetXDegrees());
+                        areaSum.put(id, areaSum.getOrDefault(id, 0.0) + tag.getTargetArea());
+                        count.put(id, count.getOrDefault(id, 0) + 1);
+                    }
+                }
+            }
+            opMode.sleep(50); // gives the Limelight time to produce a new frame
+        }
+
+        if (count.isEmpty()) {
+            opMode.telemetry.addData("Aim center (" + (selection == 1 ? "blue" : "red") + ")", "no tags seen");
+            return Double.NaN;
+        }
+
+        // find the biggest average area among the tags we saw
+        double maxArea = 0;
+        for (int id : count.keySet()) {
+            double avgArea = areaSum.get(id) / count.get(id);
+            if (avgArea > maxArea) {
+                maxArea = avgArea;
+            }
+        }
+
+        // average tx of only the prominent tags
+        double total = 0;
+        int kept = 0;
+        for (int id : count.keySet()) {
+            double avgArea = areaSum.get(id) / count.get(id);
+            if (avgArea >= maxArea * PROMINENCE_CUTOFF) {
+                total += txSum.get(id) / count.get(id);
+                kept++;
+            }
+        }
+        double center = total / kept;
+
+        opMode.telemetry.addData("Aim center (" + (selection == 1 ? "blue" : "red") + ")",
+                String.format("%.2f deg, %d seen, %d kept", center, count.size(), kept));
+        return center;
     }
 
     public int checkTags(int selection) {
